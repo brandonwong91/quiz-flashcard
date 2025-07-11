@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GCP Developer Pro Prep</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* For 3D card flip effect */
+      .transform-style-preserve-3d {
+        transform-style: preserve-3d;
+      }
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+      .backface-hidden {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.525.0",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.6.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.9.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-slate-100">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
