@@ -43,13 +43,13 @@ const flashcardSchema = {
 };
 
 export const generateQuizQuestions = async (
-  topic: string,
+  topicPrompt: string,
   count: number
 ): Promise<QuizQuestion[]> => {
   try {
     const response = await ai.models.generateContent({
       model: model,
-      contents: `Generate ${count} challenging multiple-choice questions for the GCP Professional Cloud Developer certification exam. Focus on the topic: ${topic}. Each question must have exactly 4 options.`,
+      contents: `Generate ${count} challenging multiple-choice questions for the GCP Professional Cloud Developer certification exam. ${topicPrompt} Each question must have exactly 4 options.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
