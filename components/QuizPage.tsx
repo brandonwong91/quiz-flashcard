@@ -38,6 +38,12 @@ const TOPICS = [
   "Apigee",
 ];
 
+interface UserAnswer {
+  questionIndex: number;
+  selectedAnswerIndex: number;
+  isCorrect: boolean;
+}
+
 const QuizPage: React.FC = () => {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -47,6 +53,7 @@ const QuizPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<string>(TOPICS[0]);
+  const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
 
   const startQuiz = useCallback(async () => {
     setIsLoading(true);
@@ -55,6 +62,7 @@ const QuizPage: React.FC = () => {
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedAnswer(null);
+    setUserAnswers([]);
 
     try {
       const fetchedQuestions = await generateQuizQuestions(selectedTopic, 5);
@@ -72,9 +80,17 @@ const QuizPage: React.FC = () => {
     if (selectedAnswer !== null) return;
 
     setSelectedAnswer(answerIndex);
-    if (answerIndex === questions[currentQuestionIndex].correctAnswerIndex) {
+    const isCorrect = answerIndex === questions[currentQuestionIndex].correctAnswerIndex;
+    
+    if (isCorrect) {
       setScore((prev) => prev + 1);
     }
+
+    setUserAnswers(prev => [...prev, {
+      questionIndex: currentQuestionIndex,
+      selectedAnswerIndex: answerIndex,
+      isCorrect
+    }]);
   };
 
   const handleNextQuestion = () => {
@@ -95,6 +111,7 @@ const QuizPage: React.FC = () => {
     setQuestions([]);
     setIsFinished(false);
     setError(null);
+    setUserAnswers([]);
   };
 
   if (isLoading) {
@@ -154,34 +171,101 @@ const QuizPage: React.FC = () => {
   if (isFinished) {
     const percentage = Math.round((score / questions.length) * 100);
     return (
-      <div className="text-center max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold text-slate-800 mb-2">
-          Quiz Completed!
-        </h2>
-        <p className="text-slate-600 mb-6">
-          You scored <span className="font-bold">{score}</span> out of{" "}
-          <span className="font-bold">{questions.length}</span>.
-        </p>
-        <div className="w-full bg-slate-200 rounded-full h-4 mb-4">
-          <div
-            className="bg-blue-600 h-4 rounded-full"
-            style={{ width: `${percentage}%` }}
-          ></div>
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center bg-white p-8 rounded-xl shadow-lg mb-8">
+          <h2 className="text-3xl font-bold text-slate-800 mb-2">
+            Quiz Completed!
+          </h2>
+          <p className="text-slate-600 mb-6">
+            You scored <span className="font-bold">{score}</span> out of{" "}
+            <span className="font-bold">{questions.length}</span>.
+          </p>
+          <div className="w-full bg-slate-200 rounded-full h-4 mb-4">
+            <div
+              className="bg-blue-600 h-4 rounded-full"
+              style={{ width: `${percentage}%` }}
+            ></div>
+          </div>
+          <p className="font-semibold text-xl mb-6">{percentage}%</p>
+          <div className="flex gap-4">
+            <button
+              onClick={restartQuiz}
+              className="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Try Again ({selectedTopic})
+            </button>
+            <button
+              onClick={resetToTopicSelection}
+              className="flex-1 bg-slate-200 text-slate-800 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors"
+            >
+              Choose New Topic
+            </button>
+          </div>
         </div>
-        <p className="font-semibold text-xl mb-6">{percentage}%</p>
-        <div className="flex gap-4">
-          <button
-            onClick={restartQuiz}
-            className="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Try Again ({selectedTopic})
-          </button>
-          <button
-            onClick={resetToTopicSelection}
-            className="flex-1 bg-slate-200 text-slate-800 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors"
-          >
-            Choose New Topic
-          </button>
+        
+        <div className="bg-white p-8 rounded-xl shadow-lg">
+          <h3 className="text-2xl font-bold text-slate-800 mb-6">Review Your Answers</h3>
+          <div className="space-y-6">
+            {questions.map((question, index) => {
+              const userAnswer = userAnswers.find(ua => ua.questionIndex === index);
+              const isCorrect = userAnswer?.isCorrect || false;
+              
+              return (
+                <div key={index} className="border border-slate-200 rounded-lg p-6">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold ${
+                      isCorrect ? 'bg-green-500' : 'bg-red-500'
+                    }`}>
+                      {index + 1}
+                    </div>
+                    <div className="flex-grow">
+                      <h4 className="font-semibold text-slate-800 mb-3">{question.question}</h4>
+                      <div className="space-y-2">
+                        {question.options.map((option, optionIndex) => {
+                          const isUserAnswer = userAnswer?.selectedAnswerIndex === optionIndex;
+                          const isCorrectAnswer = optionIndex === question.correctAnswerIndex;
+                          
+                          let optionClass = "p-3 rounded border ";
+                          if (isCorrectAnswer) {
+                            optionClass += "bg-green-100 border-green-500 text-green-800";
+                          } else if (isUserAnswer && !isCorrectAnswer) {
+                            optionClass += "bg-red-100 border-red-500 text-red-800";
+                          } else {
+                            optionClass += "bg-slate-50 border-slate-200 text-slate-600";
+                          }
+                          
+                          return (
+                            <div key={optionIndex} className={optionClass}>
+                              <div className="flex items-center justify-between">
+                                <span>{option}</span>
+                                <div className="flex gap-2">
+                                  {isUserAnswer && (
+                                    <span className="text-sm font-medium">
+                                      Your Answer
+                                    </span>
+                                  )}
+                                  {isCorrectAnswer && (
+                                    <CheckCircle className="w-5 h-5 text-green-600" />
+                                  )}
+                                  {isUserAnswer && !isCorrectAnswer && (
+                                    <XCircle className="w-5 h-5 text-red-600" />
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="mt-4 p-4 bg-slate-100 rounded-lg">
+                        <h5 className="font-bold text-slate-800 mb-2">Explanation:</h5>
+                        <p className="text-slate-700">{question.explanation}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     );
