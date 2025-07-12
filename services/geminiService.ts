@@ -23,8 +23,12 @@ const quizQuestionSchema = {
       type: Type.STRING,
       description: "A brief explanation of why the correct answer is right.",
     },
+    topic: {
+      type: Type.STRING,
+      description: "The specific GCP topic this question covers (e.g., 'Cloud Storage', 'IAM').",
+    },
   },
-  required: ["question", "options", "correctAnswerIndex", "explanation"],
+  required: ["question", "options", "correctAnswerIndex", "explanation", "topic"],
 };
 
 const flashcardSchema = {
@@ -49,7 +53,7 @@ export const generateQuizQuestions = async (
   try {
     const response = await ai.models.generateContent({
       model: model,
-      contents: `Generate ${count} challenging multiple-choice questions for the GCP Professional Cloud Developer certification exam. ${topicPrompt} Each question must have exactly 4 options.`,
+      contents: `Generate ${count} challenging multiple-choice questions for the GCP Professional Cloud Developer certification exam. ${topicPrompt} Each question must have exactly 4 options and include the specific GCP topic it covers.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {

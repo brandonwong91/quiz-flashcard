@@ -4,6 +4,7 @@ export interface QuizQuestion {
   options: string[];
   correctAnswerIndex: number;
   explanation: string;
+  topic: string;
 }
 
 export interface Flashcard {

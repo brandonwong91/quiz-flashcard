@@ -256,9 +256,24 @@ const QuizPage: React.FC = () => {
         </div>
 
         <div className="bg-white p-8 rounded-xl shadow-lg">
-          <h3 className="text-2xl font-bold text-slate-800 mb-6">
+          <h3 className="text-2xl font-bold text-slate-800 mb-4">
             Review Your Answers
           </h3>
+          <div className="mb-6 p-4 bg-slate-50 rounded-lg">
+            <h4 className="font-semibold text-slate-800 mb-3">Topics Covered:</h4>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(
+                questions.reduce((acc, q) => {
+                  acc[q.topic] = (acc[q.topic] || 0) + 1;
+                  return acc;
+                }, {} as Record<string, number>)
+              ).map(([topic, count]) => (
+                <span key={topic} className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                  {topic} ({count})
+                </span>
+              ))}
+            </div>
+          </div>
           <div className="space-y-6">
             {questions.map((question, index) => {
               const userAnswer = userAnswers.find(
@@ -280,6 +295,11 @@ const QuizPage: React.FC = () => {
                       {index + 1}
                     </div>
                     <div className="flex-grow">
+                      <div className="mb-2">
+                        <span className="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                          {question.topic}
+                        </span>
+                      </div>
                       <h4 className="font-semibold text-slate-800 mb-3">
                         {question.question}
                       </h4>
@@ -360,6 +380,11 @@ const QuizPage: React.FC = () => {
               }}
             ></div>
           </div>
+        </div>
+        <div className="mb-4">
+          <span className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+            {currentQuestion.topic}
+          </span>
         </div>
         <h3 className="text-xl font-semibold text-slate-800 mb-6">
           {currentQuestion.question}
