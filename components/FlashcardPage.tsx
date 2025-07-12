@@ -21,18 +21,28 @@ const FlashcardViewer: React.FC<{ flashcard: Flashcard }> = ({ flashcard }) => {
         }`}
         onClick={() => setIsFlipped(!isFlipped)}
       >
-        {/* Front of the card */}
-        <div className="absolute w-full h-full backface-hidden bg-white rounded-xl shadow-lg flex items-center justify-center p-6 cursor-pointer border-2 border-blue-500">
-          <h3 className="text-3xl font-bold text-slate-800 text-center">
-            {flashcard.topic}
-          </h3>
+        {/* Front of the card - Scenario */}
+        <div className="absolute w-full h-full backface-hidden bg-white rounded-xl shadow-lg flex flex-col justify-center p-6 cursor-pointer border-2 border-blue-500">
+          <div className="text-center mb-4">
+            <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+              Scenario
+            </span>
+          </div>
+          <p className="text-lg text-slate-800 text-center leading-relaxed">
+            {flashcard.scenario}
+          </p>
+          <p className="text-sm text-slate-500 text-center mt-4">
+            Click to reveal the solution
+          </p>
         </div>
-        {/* Back of the card */}
-        <div className="absolute w-full h-full backface-hidden bg-blue-600 text-white rounded-xl shadow-lg p-6 rotate-y-180 overflow-y-auto cursor-pointer">
-          <h4 className="text-xl font-bold border-b border-blue-400 pb-2 mb-3">
-            {flashcard.topic}
-          </h4>
-          <p className="text-base">{flashcard.content}</p>
+        {/* Back of the card - Solution */}
+        <div className="absolute w-full h-full backface-hidden bg-green-600 text-white rounded-xl shadow-lg p-6 rotate-y-180 overflow-y-auto cursor-pointer">
+          <div className="text-center mb-4">
+            <span className="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+              Solution
+            </span>
+          </div>
+          <p className="text-lg leading-relaxed">{flashcard.solution}</p>
         </div>
       </div>
     </div>

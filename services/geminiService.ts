@@ -25,25 +25,32 @@ const quizQuestionSchema = {
     },
     topic: {
       type: Type.STRING,
-      description: "The specific GCP topic this question covers (e.g., 'Cloud Storage', 'IAM').",
+      description:
+        "The specific GCP topic this question covers (e.g., 'Cloud Storage', 'IAM').",
     },
   },
-  required: ["question", "options", "correctAnswerIndex", "explanation", "topic"],
+  required: [
+    "question",
+    "options",
+    "correctAnswerIndex",
+    "explanation",
+    "topic",
+  ],
 };
 
 const flashcardSchema = {
   type: Type.OBJECT,
   properties: {
-    topic: {
+    scenario: {
       type: Type.STRING,
-      description: "The main topic of the flashcard (e.g., 'Cloud Storage').",
+      description: "A real-world scenario or use case that describes a specific business or technical requirement.",
     },
-    content: {
+    solution: {
       type: Type.STRING,
-      description: "The concise explanation or key points for the topic.",
+      description: "The GCP service or combination of services that best addresses the scenario, with brief explanation of why.",
     },
   },
-  required: ["topic", "content"],
+  required: ["scenario", "solution"],
 };
 
 export const generateQuizQuestions = async (
@@ -81,7 +88,7 @@ export const generateFlashcards = async (
   try {
     const response = await ai.models.generateContent({
       model: model,
-      contents: `Generate ${count} flashcards covering diverse and important topics for the GCP Professional Cloud Developer certification exam.`,
+      contents: `Generate ${count} scenario-based flashcards for the GCP Professional Cloud Developer certification exam. Each flashcard should present a real-world business or technical scenario first, followed by the best GCP service solution. Base scenarios on common GCP certification question patterns. Format: scenario describes the situation/requirement, solution reveals the appropriate GCP service with brief justification.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {

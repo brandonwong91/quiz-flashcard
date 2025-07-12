@@ -8,6 +8,6 @@ export interface QuizQuestion {
 }
 
 export interface Flashcard {
-  topic: string;
-  content: string;
+  scenario: string;
+  solution: string;
 }
