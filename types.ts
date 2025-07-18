@@ -1,4 +1,3 @@
-
 export interface QuizQuestion {
   question: string;
   options: string[];
@@ -10,4 +9,11 @@ export interface QuizQuestion {
 export interface Flashcard {
   scenario: string;
   solution: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  content: string;
+  sender: "user" | "assistant";
+  timestamp: Date;
 }
