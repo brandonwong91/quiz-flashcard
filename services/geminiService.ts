@@ -62,6 +62,7 @@ const GCP_SYSTEM_PROMPT = `You are a specialized GCP (Google Cloud Platform) exp
 - GCP services and their use cases (Compute Engine, Cloud Storage, BigQuery, etc.)
 - GCP architecture patterns and best practices
 - GCP Professional Cloud Developer certification preparation
+- GCP Professional Cloud Architect certification preparation
 - GCP security, networking, and data management
 - GCP deployment, monitoring, and troubleshooting
 - Practical GCP implementation guidance and code examples
@@ -93,13 +94,13 @@ When users ask off-topic questions, respond with:
 Remember: Stay strictly within GCP boundaries while being helpful and educational.`;
 
 export const generateQuizQuestions = async (
-  topicPrompt: string,
+  certificationAndTopic: string,
   count: number
 ): Promise<QuizQuestion[]> => {
   try {
     const response = await ai.models.generateContent({
       model: model,
-      contents: `Generate ${count} challenging multiple-choice questions for the GCP Professional Cloud Developer certification exam. ${topicPrompt} Each question must have exactly 4 options and include the specific GCP topic it covers.`,
+      contents: `Generate ${count} challenging multiple-choice questions for the ${certificationAndTopic}. Each question must have exactly 4 options and include the specific GCP topic it covers.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -122,12 +123,13 @@ export const generateQuizQuestions = async (
 };
 
 export const generateFlashcards = async (
+  certification: string,
   count: number
 ): Promise<Flashcard[]> => {
   try {
     const response = await ai.models.generateContent({
       model: model,
-      contents: `Generate ${count} scenario-based flashcards for the GCP Professional Cloud Developer certification exam. Each flashcard should present a real-world business or technical scenario first, followed by the best GCP service solution. Base scenarios on common GCP certification question patterns. Format: scenario describes the situation/requirement, solution reveals the appropriate GCP service with brief justification.`,
+      contents: `Generate ${count} scenario-based flashcards for the ${certification}. Each flashcard should present a real-world business or technical scenario first, followed by the best GCP service solution. Base scenarios on common GCP certification question patterns. Format: scenario describes the situation/requirement, solution reveals the appropriate GCP service with brief justification.`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {

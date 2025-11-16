@@ -1,11 +1,12 @@
-# GCP Developer Pro Prep
+# GCP Prep
 
-An AI-powered application to help users prepare for the GCP Cloud Professional Developer certification exam. Features an interactive quiz mode to test knowledge and a flashcard mode for quick study notes on key topics.
+An AI-powered application to help users prepare for the GCP Professional Cloud Developer and GCP Professional Cloud Architect certification exams. Features an interactive quiz mode to test knowledge and a flashcard mode for quick study notes on key topics.
 
 ## Features
 
-- **AI-Powered Quiz**: Test your GCP knowledge with dynamically generated questions
-- **Flashcard Mode**: Quick study notes on key GCP topics
+- **Dual Certification Support**: Study for both the GCP Professional Cloud Developer and Professional Cloud Architect exams.
+- **AI-Powered Quiz**: Test your GCP knowledge with dynamically generated questions for your chosen certification.
+- **Flashcard Mode**: Quick study notes on key GCP topics for both certifications.
 - **Interactive UI**: Clean, responsive interface built with React and TypeScript
 - **Google Gemini Integration**: Powered by Google's Gemini AI for intelligent content generation
 
@@ -46,6 +47,7 @@ An AI-powered application to help users prepare for the GCP Cloud Professional D
 - **Routing**: React Router DOM
 - **Build Tool**: Vite
 - **AI Integration**: Google Gemini API
+-
 - **Icons**: Lucide React
 - **Styling**: Tailwind CSS classes
 
@@ -53,9 +55,9 @@ An AI-powered application to help users prepare for the GCP Cloud Professional D
 
 ```
 ├── components/
-│   ├── HomePage.tsx        # Landing page
-│   ├── QuizPage.tsx        # Quiz interface
-│   ├── FlashcardPage.tsx   # Flashcard study mode
+│   ├── HomePage.tsx        # Landing page with certification selection
+│   ├── QuizPage.tsx        # Quiz interface for a specific certification
+│   ├── FlashcardPage.tsx   # Flashcard study mode for a specific certification
 │   ├── LoadingSpinner.tsx  # Loading component
 │   └── ErrorDisplay.tsx    # Error handling
 ├── services/

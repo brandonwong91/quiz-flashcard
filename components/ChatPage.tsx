@@ -710,11 +710,11 @@ const ChatPage: React.FC = () => {
     <div className="max-w-4xl mx-auto h-full flex flex-col px-4 sm:px-6 lg:px-8">
       {/* Header - Enhanced with animations and visual polish */}
       <div
-        className="bg-white rounded-xl shadow-lg mb-4 sm:mb-6 p-4 sm:p-6 border border-slate-100 
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-4 sm:mb-6 p-4 sm:p-6 border border-slate-100 dark:border-gray-700 
         transition-all duration-300 hover:shadow-xl animate-fade-in"
       >
         <div className="flex items-center gap-3">
-          <div className="bg-blue-100 p-2 rounded-full">
+          <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-full">
             <svg
               className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600"
               xmlns="http://www.w3.org/2000/svg"
@@ -731,10 +731,10 @@ const ChatPage: React.FC = () => {
             </svg>
           </div>
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 dark:text-white mb-1">
               GCP Chat Assistant
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-gray-300">
               Ask me anything about Google Cloud Platform services and
               certification topics!
             </p>
@@ -743,9 +743,9 @@ const ChatPage: React.FC = () => {
       </div>
 
       {/* Chat Container - Full height on mobile */}
-      <div className="flex-1 bg-white rounded-xl shadow-lg flex flex-col overflow-hidden min-h-0">
+      <div className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg flex flex-col overflow-hidden min-h-0">
         {/* Messages Area - Optimized padding for mobile */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-slate-50 chat-messages">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6 bg-slate-50 dark:bg-gray-900 chat-messages">
           {messages.length === 0 ? (
             <div className="text-center text-slate-500 mt-4 sm:mt-8 px-4 animate-fade-in">
               <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-4 sm:mb-6 border border-slate-200 transition-all duration-300 hover:shadow-lg">
@@ -800,16 +800,17 @@ const ChatPage: React.FC = () => {
         <TopicSuggestion />
 
         {/* Input Area - Mobile-optimized layout with enhanced animations */}
-        <div className="border-t border-slate-200 p-3 sm:p-4 bg-white">
+        <div className="border-t border-slate-200 dark:border-gray-700 p-3 sm:p-4 bg-white dark:bg-gray-800">
           <form onSubmit={handleSubmit} className="flex gap-2 sm:gap-3">
             <input
               type="text"
               value={currentMessage}
               onChange={(e) => setCurrentMessage(e.target.value)}
               placeholder="Ask about GCP services..."
-              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-300 rounded-lg 
+              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-slate-300 dark:border-gray-600 rounded-lg 
                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent 
-                transition-all duration-200 shadow-sm hover:shadow-md focus:shadow-md resize-none"
+                transition-all duration-200 shadow-sm hover:shadow-md focus:shadow-md resize-none
+                bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-400"
               disabled={isLoading}
               autoComplete="off"
               autoCapitalize="sentences"
@@ -819,10 +820,10 @@ const ChatPage: React.FC = () => {
             <button
               type="submit"
               disabled={!currentMessage.trim() || isLoading}
-              className="bg-blue-600 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg 
-                hover:bg-blue-700 active:bg-blue-800 
+              className="bg-blue-600 dark:bg-blue-500 text-white px-3 sm:px-6 py-2 sm:py-3 rounded-lg 
+                hover:bg-blue-700 dark:hover:bg-blue-600 active:bg-blue-800 dark:active:bg-blue-700 
                 transition-all duration-200 
-                disabled:bg-slate-300 disabled:cursor-not-allowed 
+                disabled:bg-slate-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed 
                 flex items-center gap-1 sm:gap-2 touch-manipulation
                 btn-transition shadow-sm hover:shadow-md
                 transform hover:-translate-y-0.5 active:translate-y-0"

@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import type { QuizQuestion } from "../types";
 import { generateQuizQuestions } from "../services/geminiService";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { ErrorDisplay } from "./ErrorDisplay";
 import { CheckCircle, XCircle } from "lucide-react";
 
-const TOPICS = [
+const DEVELOPER_TOPICS = [
   "App Engine",
   "Artifact Registry",
   "Cloud Build",
@@ -38,6 +39,15 @@ const TOPICS = [
   "Apigee",
 ];
 
+const ARCHITECT_TOPICS = [
+  "Designing and planning a cloud solution architecture",
+  "Managing and provisioning a cloud solution infrastructure",
+  "Designing for security and compliance",
+  "Analyzing and optimizing technical and business processes",
+  "Managing implementation",
+  "Ensuring solution and operations reliability",
+];
+
 interface UserAnswer {
   questionIndex: number;
   selectedAnswerIndex: number;
@@ -45,6 +55,7 @@ interface UserAnswer {
 }
 
 const QuizPage: React.FC = () => {
+  const { certification } = useParams<{ certification: string }>();
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -52,12 +63,20 @@ const QuizPage: React.FC = () => {
   const [isFinished, setIsFinished] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedTopic, setSelectedTopic] = useState<string>(TOPICS[0]);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [questionCount, setQuestionCount] = useState<number>(5);
   const [topicMode, setTopicMode] = useState<"specific" | "random" | "all">(
     "specific"
   );
+
+  const TOPICS =
+    certification === "architect" ? ARCHITECT_TOPICS : DEVELOPER_TOPICS;
+  const certificationName =
+    certification === "architect"
+      ? "GCP Professional Cloud Architect"
+      : "GCP Professional Cloud Developer";
+
+  const [selectedTopic, setSelectedTopic] = useState<string>(TOPICS[0]);
 
   const startQuiz = useCallback(async () => {
     setIsLoading(true);
@@ -79,7 +98,7 @@ const QuizPage: React.FC = () => {
       }
 
       const fetchedQuestions = await generateQuizQuestions(
-        topicPrompt,
+        `${certificationName} certification exam. ${topicPrompt}`,
         questionCount
       );
       setQuestions(fetchedQuestions);
@@ -90,7 +109,7 @@ const QuizPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedTopic, questionCount, topicMode]);
+  }, [selectedTopic, questionCount, topicMode, certificationName]);
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (selectedAnswer !== null) return;
@@ -139,7 +158,8 @@ const QuizPage: React.FC = () => {
       <div className="flex flex-col items-center justify-center h-96 gap-4">
         <LoadingSpinner />
         <p className="text-slate-600">
-          Generating your {questionCount}-question quiz...
+          Generating your {questionCount}-question quiz for the{" "}
+          {certificationName} exam...
         </p>
       </div>
     );
@@ -153,7 +173,7 @@ const QuizPage: React.FC = () => {
     return (
       <div className="text-center max-w-lg mx-auto">
         <h2 className="text-3xl font-bold text-slate-800 mb-4">
-          Ready to Test Your Knowledge?
+          {certificationName} Quiz
         </h2>
         <p className="text-slate-600 mb-6">
           Customize your quiz settings and start testing your GCP knowledge.

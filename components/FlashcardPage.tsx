@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import type { Flashcard } from "../types";
 import { generateFlashcards } from "../services/geminiService";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -50,16 +51,25 @@ const FlashcardViewer: React.FC<{ flashcard: Flashcard }> = ({ flashcard }) => {
 };
 
 const FlashcardPage: React.FC = () => {
+  const { certification } = useParams<{ certification: string }>();
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const certificationName =
+    certification === "architect"
+      ? "GCP Professional Cloud Architect"
+      : "GCP Professional Cloud Developer";
+
   const fetchFlashcards = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const fetchedCards = await generateFlashcards(10);
+      const fetchedCards = await generateFlashcards(
+        `${certificationName} certification exam`,
+        10
+      );
       setFlashcards(fetchedCards);
       setCurrentCardIndex(0);
     } catch (err) {
@@ -69,7 +79,7 @@ const FlashcardPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [certificationName]);
 
   useEffect(() => {
     fetchFlashcards();
@@ -89,7 +99,9 @@ const FlashcardPage: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center h-96 gap-4">
         <LoadingSpinner />
-        <p className="text-slate-600">Generating your flashcards...</p>
+        <p className="text-slate-600">
+          Generating your flashcards for the {certificationName} exam...
+        </p>
       </div>
     );
   }
@@ -119,7 +131,7 @@ const FlashcardPage: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center">
       <h2 className="text-3xl font-bold text-slate-800 mb-2">
-        Study Flashcards
+        {certificationName} Flashcards
       </h2>
       <p className="text-slate-600 mb-6">
         Click on a card to flip it and reveal the details. Good luck!
